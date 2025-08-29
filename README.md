@@ -30,11 +30,20 @@ npm install
 \`\`\`
 
 ### 3. Cấu hình environment
-Tạo file \`.env.local\`:
+Sao chép file mẫu và chỉnh sửa:
+\`\`\`bash
+cp .env.example .env
+\`\`\`
+
+Chỉnh sửa file \`.env\`:
 \`\`\`env
+# Cho development local
 DATABASE_URL=postgresql://postgres:password@localhost:5432/shortlink
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
-NEXT_TELEMETRY_DISABLED=1
+
+# Cho production, thay thế bằng database URL thực tế
+# DATABASE_URL=postgresql://user:pass@your-db-host:5432/dbname
+# NEXT_PUBLIC_BASE_URL=https://yourdomain.com
 \`\`\`
 
 ### 4. Chạy với Docker (Khuyến nghị)
@@ -141,13 +150,68 @@ npm start
 npm run lint
 \`\`\`
 
-## 📝 Environment Variables
+## � Deployment
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| \`DATABASE_URL\` | PostgreSQL connection string | - |
-| \`NEXT_PUBLIC_BASE_URL\` | Base URL for short links | http://localhost:3000 |
-| \`NEXT_TELEMETRY_DISABLED\` | Disable Next.js telemetry | 1 |
+### Deploy với Database từ Cloud Provider
+
+#### 1. Tạo Database trên Cloud
+Tạo PostgreSQL database trên một trong các provider:
+- **Supabase** (miễn phí): https://supabase.com
+- **Neon** (miễn phí): https://neon.tech  
+- **Railway** (miễn phí): https://railway.app
+- **PlanetScale** (MySQL): https://planetscale.com
+
+#### 2. Cập nhật Environment Variables
+Thay đổi file `.env` với thông tin database thực tế:
+```env
+# Database từ cloud provider
+DATABASE_URL=postgresql://user:password@host:port/database
+
+# Domain production của bạn
+NEXT_PUBLIC_BASE_URL=https://yourdomain.com
+```
+
+#### 3. Deploy trên Vercel
+```bash
+# Cài đặt Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel
+
+# Set environment variables trên Vercel dashboard:
+# DATABASE_URL=postgresql://...
+# NEXT_PUBLIC_BASE_URL=https://your-app.vercel.app
+```
+
+#### 4. Deploy trên Railway
+```bash
+# Connect GitHub repository với Railway
+# Thêm environment variables trong Railway dashboard
+```
+
+#### 5. Deploy với Docker
+```bash
+# Build image
+docker build -t shortlink-app .
+
+# Run với environment variables
+docker run -p 3000:3000 \
+  -e DATABASE_URL="postgresql://..." \
+  -e NEXT_PUBLIC_BASE_URL="https://yourdomain.com" \
+  shortlink-app
+```
+
+## �📝 Environment Variables
+
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| `DATABASE_URL` | PostgreSQL connection string | - | ✅ |
+| `NEXT_PUBLIC_BASE_URL` | Base URL for short links | http://localhost:3000 | ✅ |
+| `NEXT_TELEMETRY_DISABLED` | Disable Next.js telemetry | 1 | ❌ |
+| `POSTGRES_DB` | Database name (Docker only) | shortlink | ❌ |
+| `POSTGRES_USER` | Database user (Docker only) | postgres | ❌ |
+| `POSTGRES_PASSWORD` | Database password (Docker only) | password | ❌ |
 
 ## 🤝 Contributing
 
