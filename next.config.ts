@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: 'standalone',
+  experimental: {
+    // Remove turbopack as it's causing issues
+  },
 };
 
 export default nextConfig;
