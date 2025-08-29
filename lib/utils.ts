@@ -28,6 +28,6 @@ export function isValidUrl(url: string): boolean {
  * Tạo short URL đầy đủ
  */
 export function createShortUrl(shortCode: string): string {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3001';
   return `${baseUrl}/${shortCode}`;
 }
